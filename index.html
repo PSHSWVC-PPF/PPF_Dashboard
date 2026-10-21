@@ -398,6 +398,9 @@
 
                 let currentVotes = item.VoteCount || 0;
                 let idStr = item.ItemID ? item.ItemID.toString().padStart(2, '0') : '--';
+                
+                // Pulls the new Classification column, defaults to 'Unclassified' if blank
+                let classificationText = item.Classification ? item.Classification : 'Unclassified';
 
                 html += `
                 <div class="bg-white border rounded-2xl p-6 shadow-sm transition-colors flex gap-5 relative overflow-hidden ${borderClass}">
@@ -412,10 +415,16 @@
                     
                     <div class="mt-2 pr-4 w-full">
                         <h4 class="text-lg font-bold text-[#132644] leading-snug mb-2">${item.DeficiencyTitle || 'Unknown Issue'}</h4>
+                        
+                        <!-- Added Classification Badge Next to Location -->
                         <div class="flex justify-between items-center mb-3">
-                            <p class="text-xs font-bold text-[#165CCA] uppercase tracking-widest"><i class="fas fa-map-marker-alt mr-1"></i> ${item.Location || 'Various'}</p>
+                            <div class="flex items-center gap-3">
+                                <span class="px-2.5 py-1 bg-slate-100 text-slate-500 rounded text-[9px] font-black uppercase tracking-widest border border-slate-200 shadow-sm">${classificationText}</span>
+                                <p class="text-xs font-bold text-[#165CCA] uppercase tracking-widest"><i class="fas fa-map-marker-alt mr-1"></i> ${item.Location || 'Various'}</p>
+                            </div>
                             <span class="text-[11px] font-bold text-slate-400">ID: PRI-${idStr}</span>
                         </div>
+                        
                         <p class="text-sm text-slate-500 leading-relaxed">${item.Description || ''}</p>
                     </div>
                 </div>`;
@@ -790,6 +799,9 @@
                     }).join('');
                 };
 
+                // Pull the DocLabel dynamically, fallback to 'View Document' if empty
+                const buttonText = p.DocLabel ? p.DocLabel : 'View Document';
+
                 gridHTML += `
                     <div class="relative bg-white border border-slate-200 rounded-2xl overflow-hidden flex flex-col h-full shadow-sm transition-all duration-300 ${cardBaseStyle}">
                         
@@ -847,7 +859,7 @@
                                     </div>
                                 </div>
                                 
-                                ${p.AttachmentURL ? `<a href="${p.AttachmentURL}" target="_blank" class="w-full py-3 bg-[#FFFBEB] border border-[#F1C40F]/50 text-yellow-700 rounded-xl text-[9px] font-black uppercase tracking-[0.2em] flex items-center justify-center gap-2 hover:bg-[#F1C40F] hover:text-[#132644] transition-all shadow-sm no-print group/btn"><i class="fas fa-file-contract"></i> Record Vault</a>` : `<div class="w-full py-3 bg-slate-50 text-slate-400 rounded-xl text-[9px] font-black uppercase text-center tracking-widest italic border border-slate-200 no-print">Archives Offline</div>`}
+                                ${p.AttachmentURL ? `<a href="${p.AttachmentURL}" target="_blank" class="w-full py-3 bg-[#FFFBEB] border border-[#F1C40F]/50 text-yellow-700 rounded-xl text-[9px] font-black uppercase tracking-[0.2em] flex items-center justify-center gap-2 hover:bg-[#F1C40F] hover:text-[#132644] transition-all shadow-sm no-print group/btn"><i class="fas fa-file-contract"></i> ${buttonText}</a>` : `<div class="w-full py-3 bg-slate-50 text-slate-400 rounded-xl text-[9px] font-black uppercase text-center tracking-widest italic border border-slate-200 no-print">Archives Offline</div>`}
                                 
                                 <div class="mt-6">
                                     <div class="flex justify-between items-center text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-2">
